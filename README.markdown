@@ -240,4 +240,4 @@ MIT License. Free to use and modify.
 
 ## 📬 Contact
 
-For issues or suggestions, open a GitHub issue or contact the maintainer at [your-email@example.com](mailto:your-email@example.com).
+For issues or suggestions, open a GitHub issue or contact the maintainer at Rishi Dubey(mailto:dubeyrishi2002@gmail.com).
