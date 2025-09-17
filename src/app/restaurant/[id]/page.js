@@ -1,74 +1,3 @@
-// 'use client';
-// import { useState, useEffect } from 'react';
-// import { useParams } from 'next/navigation';
-// import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, BarChart, Bar } from 'recharts';
-// import { format } from 'date-fns';
-
-// export default function RestaurantDetail() {
-//   const { id } = useParams();
-//   const [trends, setTrends] = useState([]);
-//   const [startDate, setStartDate] = useState('2025-01-01');
-//   const [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'));
-//   const [minAmount, setMinAmount] = useState(0);
-//   const [maxAmount, setMaxAmount] = useState('');
-//   const [minHour, setMinHour] = useState(0);
-//   const [maxHour, setMaxHour] = useState(23);
-
-//   useEffect(() => {
-//     fetchTrends();
-//   }, [id, startDate, endDate, minAmount, maxAmount, minHour, maxHour]);
-
-//   const fetchTrends = async () => {
-//     const res = await fetch(`/api/orders/trends?restaurant_id=${id}&start_date=${startDate}&end_date=${endDate}&min_amount=${minAmount}&max_amount=${maxAmount}&min_hour=${minHour}&max_hour=${maxHour}`);
-//     const data = await res.json();
-//     setTrends(data);
-//   };
-
-//   return (
-//     <div className="p-4">
-//       <h1 className="text-2xl">Order Trends</h1>
-//       <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-//       <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-//       <input type="number" placeholder="Min Amount" value={minAmount} onChange={(e) => setMinAmount(e.target.value)} />
-//       <input type="number" placeholder="Max Amount" value={maxAmount} onChange={(e) => setMaxAmount(e.target.value)} />
-//       <input type="number" placeholder="Min Hour" value={minHour} onChange={(e) => setMinHour(e.target.value)} />
-//       <input type="number" placeholder="Max Hour" value={maxHour} onChange={(e) => setMaxHour(e.target.value)} />
-
-//       <h2>Daily Orders Count</h2>
-//       <LineChart width={600} height={300} data={trends}>
-//         <XAxis dataKey="_id" />
-//         <YAxis />
-//         <Tooltip />
-//         <Line type="monotone" dataKey="orders_count" stroke="#8884d8" />
-//       </LineChart>
-
-//       <h2>Daily Revenue</h2>
-//       <LineChart width={600} height={300} data={trends}>
-//         <XAxis dataKey="_id" />
-//         <YAxis />
-//         <Tooltip />
-//         <Line type="monotone" dataKey="revenue" stroke="#82ca9d" />
-//       </LineChart>
-
-//       <h2>Average Order Value</h2>
-//       <LineChart width={600} height={300} data={trends}>
-//         <XAxis dataKey="_id" />
-//         <YAxis />
-//         <Tooltip />
-//         <Line type="monotone" dataKey="avg_order_value" stroke="#ffc658" />
-//       </LineChart>
-
-//       <h2>Peak Order Hour per Day</h2>
-//       <BarChart width={600} height={300} data={trends}>
-//         <XAxis dataKey="_id" />
-//         <YAxis />
-//         <Tooltip />
-//         <Bar dataKey="peak_hour" fill="#8884d8" />
-//       </BarChart>
-//     </div>
-//   );
-// }
-
 'use client';
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
@@ -117,7 +46,6 @@ export default function RestaurantDetail() {
 
   return (
     <div className="min-h-screen bg-gray-100 text-black font-poppins">
-      {/* Hero Section with Background Image */}
       <div className="relative h-48 w-full overflow-hidden">
         {/* <img
           src="https://tse2.mm.bing.net/th/id/OIP.FPzj2RXXRTHlFA4thRGkZQHaEo?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
@@ -147,7 +75,6 @@ export default function RestaurantDetail() {
         
       </div>
 
-      {/* Main Content */}
       <div className="max-w-7xl mx-auto p-6">
         <motion.nav
           initial={{ opacity: 0, x: -20 }}
@@ -168,6 +95,7 @@ export default function RestaurantDetail() {
             </li>
           </ol>
         </motion.nav>
+
         {/* Filters */}
         <motion.div
           initial={{ opacity: 0 }}
