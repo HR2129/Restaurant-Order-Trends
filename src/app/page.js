@@ -14,7 +14,7 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [sort, setSort] = useState('name');
   const [sortOrder, setSortOrder] = useState('asc');
-  const limit = 7; // Set limit to 7
+  const limit = 7; 
 
   useEffect(() => {
     fetchRestaurants();
@@ -56,7 +56,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-100 font-poppins text-black">
-      {/* Hero Section with Background Image */}
       <div className="relative h-64 w-full overflow-hidden">
         <Image
           src="/images/restaurant-bg.jpg"
@@ -109,7 +108,6 @@ export default function Home() {
           />
         </motion.div>
 
-        {/* Error Message */}
         {error && (
           <motion.p
             initial={{ opacity: 0 }}
@@ -192,7 +190,6 @@ export default function Home() {
           </table>
         </motion.div>
 
-        {/* Pagination */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
