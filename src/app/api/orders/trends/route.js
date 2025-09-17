@@ -26,7 +26,6 @@ export async function GET(request) {
     },
   };
 
-  // Aggregation for efficiency on large datasets
   const trends = await Order.aggregate([
     { $match: match },
     {
@@ -51,6 +50,5 @@ export async function GET(request) {
     { $sort: { _id: 1 } },
   ]);
 
-  // Caching comment: For frequent queries, cache with TTL in Redis.
   return NextResponse.json(trends);
 }
