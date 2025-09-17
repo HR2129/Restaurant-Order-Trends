@@ -1,103 +1,223 @@
-import Image from "next/image";
+'use client';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [restaurants, setRestaurants] = useState([]);
+  const [search, setSearch] = useState('');
+  const [location, setLocation] = useState('');
+  const [cuisine, setCuisine] = useState('');
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [error, setError] = useState(null);
+  const [sort, setSort] = useState('name');
+  const [sortOrder, setSortOrder] = useState('asc');
+  const limit = 7; // Set limit to 7
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  useEffect(() => {
+    fetchRestaurants();
+  }, [search, location, cuisine, page, sort, sortOrder]);
+
+  const fetchRestaurants = async () => {
+    try {
+      setError(null);
+      const res = await fetch(
+        `/api/restaurants?search=${encodeURIComponent(search)}&location=${encodeURIComponent(
+          location
+        )}&cuisine=${encodeURIComponent(cuisine)}&page=${page}&sort=${
+          sortOrder === 'desc' ? '-' : ''
+        }${sort}&limit=${limit}`
+      );
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const data = await res.json();
+      if (data.error) {
+        throw new Error(data.message || 'API error');
+      }
+      setRestaurants(data.restaurants || []);
+      setTotal(data.total || 0);
+    } catch (error) {
+      console.error('Error fetching restaurants:', error);
+      setError(error.message);
+    }
+  };
+
+  const handleSort = (field) => {
+    if (sort === field) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSort(field);
+      setSortOrder('asc');
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 font-poppins text-black">
+      {/* Hero Section with Background Image */}
+      <div className="relative h-64 w-full overflow-hidden">
+        <Image
+          src="/images/restaurant-bg.jpg"
+          alt="Restaurant Background"
+          layout="fill"
+          objectFit="cover"
+          className="opacity-50"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-transparent flex items-center justify-center">
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-4xl md:text-5xl font-bold text-white"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            Restaurant Analytics Dashboard
+          </motion.h1>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto p-6">
+        {/* Filters */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="mb-6 flex flex-col md:flex-row gap-4"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+          <input
+            type="text"
+            placeholder="Search by name"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="p-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <input
+            type="text"
+            placeholder="Filter by location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            className="p-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="text"
+            placeholder="Filter by cuisine"
+            value={cuisine}
+            onChange={(e) => setCuisine(e.target.value)}
+            className="p-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </motion.div>
+
+        {/* Error Message */}
+        {error && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-red-500 mb-4"
+          >
+            Error: {error}
+          </motion.p>
+        )}
+
+        {/* Restaurants Table */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white rounded-lg shadow-lg overflow-hidden"
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <table className="w-full table-auto">
+            <thead className="bg-blue-600 text-white">
+              <tr>
+                <th
+                  className="p-4 text-left cursor-pointer hover:bg-blue-700"
+                  onClick={() => handleSort('name')}
+                >
+                  Name {sort === 'name' && (sortOrder === 'asc' ? '↑' : '↓')}
+                </th>
+                <th
+                  className="p-4 text-left cursor-pointer hover:bg-blue-700"
+                  onClick={() => handleSort('location')}
+                >
+                  Location {sort === 'location' && (sortOrder === 'asc' ? '↑' : '↓')}
+                </th>
+                <th
+                  className="p-4 text-left cursor-pointer hover:bg-blue-700"
+                  onClick={() => handleSort('cuisine')}
+                >
+                  Cuisine {sort === 'cuisine' && (sortOrder === 'asc' ? '↑' : '↓')}
+                </th>
+                <th className="p-4 text-left">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <AnimatePresence>
+                {restaurants.length > 0 ? (
+                  restaurants.map((restaurant) => (
+                    <motion.tr
+                      key={restaurant.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className="border-b hover:bg-gray-50"
+                    >
+                      <td className="p-4">{restaurant.name}</td>
+                      <td className="p-4">{restaurant.location}</td>
+                      <td className="p-4">{restaurant.cuisine}</td>
+                      <td className="p-4">
+                        <Link
+                          href={`/restaurant/${restaurant.id}`}
+                          className="text-blue-500 hover:text-blue-700 font-medium"
+                        >
+                          View Details
+                        </Link>
+                      </td>
+                    </motion.tr>
+                  ))
+                ) : (
+                  <motion.tr
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center"
+                  >
+                    <td colSpan="4" className="p-4 text-gray-500">
+                      No restaurants found.
+                    </td>
+                  </motion.tr>
+                )}
+              </AnimatePresence>
+            </tbody>
+          </table>
+        </motion.div>
+
+        {/* Pagination */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="mt-6 flex justify-center gap-4"
         >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-blue-700 transition"
+          >
+            Previous
+          </button>
+          <span className="flex items-center">
+            Page {page} of {Math.ceil(total / limit)}
+          </span>
+          <button
+            onClick={() => setPage((p) => p + 1)}
+            disabled={page * limit >= total}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-blue-700 transition"
+          >
+            Next
+          </button>
+        </motion.div>
+      </div>
     </div>
   );
 }
