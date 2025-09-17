@@ -1,4 +1,6 @@
 Restaurant Analytics Dashboard
+
+
 A web application built with Next.js 14 (App Router) to analyze restaurant data, featuring a paginated list of restaurants with filters and sorting, and detailed analytics for individual restaurants with interactive charts and tables. The application uses MongoDB Atlas for data storage, Tailwind CSS for styling, Framer Motion for animations, and Recharts for data visualization, with a premium aesthetic using the Poppins font and a restaurant-themed background image.
 Features
 
